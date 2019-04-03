@@ -1,0 +1,10 @@
+---
+wxApiUrl:
+    getAccessToken : 'https://api.weixin.qq.com/cgi-bin/token?'				#getAccessToken 获取APP凭证
+    accessTokenHandle : 'https://api.weixin.qq.com/sns/oauth2/access_token?'            # access_token 通过用户鉴权Code获取 OpneId
+sysConfig:
+    contentTypeXml : 'text/xml'
+    serverToken : '45634564645'
+    appid : 'wx97bb63ff6573aeaf'
+    secret : '6535b7251b15ba5f0bc4d24699901e2f'
+    baseProUrl : 'http://www.xeeyoung.cn/wx/wx/'					#项目基础路径
