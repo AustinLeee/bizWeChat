@@ -162,7 +162,7 @@ function eventHandle(reqMsg, res) {
 			break;
 		case 'text':
 			logger.info('用户发送文本内容');
-			res.send(msg.txtMsg(reqMsg.FromUserName, reqMsg.ToUserName, '欢迎关注上海熙洋信息技术有限公司公众号'));
+			res.send(msg.txtMsg(reqMsg.FromUserName, reqMsg.ToUserName, configDoc.message.autoReply));
 			break;
 	}
 }
@@ -179,7 +179,7 @@ const getAccessToken = function () {
 			'appid': configDoc.sysConfig.appid,
 			'secret': configDoc.sysConfig.secret
 		};
-		let wxGetAccessTokenBaseUrl = 'https://api.weixin.qq.com/cgi-bin/token?' + querystring.stringify(queryParams);
+		let wxGetAccessTokenBaseUrl = configDoc.wxApiUrl.getAccessToken + querystring.stringify(queryParams);
 		let options = {
 			method: 'GET',
 			url: wxGetAccessTokenBaseUrl
@@ -244,14 +244,11 @@ const getUserOpenId = function (code) {
 function createMenu(createMenuToken, openId) {
 
 	var menuData = {
-		"button": [
-			{
+		"button": [{
 				"name": "熙洋动态",
 				"type": "view",
-				"url": configDoc.wxApiUrl.bizInfo
-			},
-			{
-				"name": "故障报修",
+				"url": configDoc.wxApiUrl.bizInfo},
+			{"name": "故障报修",
 				"sub_button": [{
 					"type": "view",
 					"name": "故障报修",
@@ -273,7 +270,7 @@ function createMenu(createMenuToken, openId) {
 
 	logger.info('发送菜单创建请求,请求数据:' + JSON.stringify(menuData));
 	let options = {
-		url: 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' + createMenuToken,
+		url: configDoc.wxApiUrl.createMenu + createMenuToken,
 		form: JSON.stringify(menuData),
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
@@ -308,17 +305,15 @@ scheduleCronstyle();
 
 //定时发送消息
 function sendMessage(createToken, messageArgs) {
-
 	var messageData = {
 		"touser": messageArgs.touser,
 		"template_id": messageArgs.template_id,
 		"url": messageArgs.url,
 		"data": JSON.parse(messageArgs.data)
 	};
-
 	console.log('messageArgs= ' + JSON.stringify(messageData));
 	let options = {
-		url: 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + createToken,
+		url: configDoc.wxApiUrl.messageSend + createToken,
 		form: JSON.stringify(messageData),
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
