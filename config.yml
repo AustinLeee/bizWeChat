@@ -2,6 +2,7 @@
 wxApiUrl:
     getAccessToken : 'https://api.weixin.qq.com/cgi-bin/token?'				#getAccessToken 获取APP凭证
     accessTokenHandle : 'https://api.weixin.qq.com/sns/oauth2/access_token?'            # access_token 通过用户鉴权Code获取 OpneId
+    bizInfo : https://mp.weixin.qq.com/mp/homepage?__biz=MzUyNzk4NDIxNQ==&hid=1&sn=734f75cd7876ea5b8aa304100a32411b
 sysConfig:
     contentTypeXml : 'text/xml'
     serverToken : '45634564645'
