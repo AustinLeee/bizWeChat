@@ -319,7 +319,7 @@ function sendMessage(createToken, messageArgs) {
 		if (err != undefined) {
 			logger.error('请求消息发送失败.原因：' + err);
 		} else {
-			logger.info('请求消息发送接口成功. 响应: ' + JSON.stringify(body) + '错误内容:' + JSON.stringify(body).errmsg);
+			logger.info('请求消息发送接口成功. 响应: ' + JSON.stringify(body) + '错误内容:' + JSON.parse(body).errmsg);
 
 			//if(body.errmsg == "ok"){
 				//如果发送数据成功 更新消息状态
