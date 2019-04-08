@@ -316,17 +316,17 @@ function sendMessage(createToken, messageArgs) {
 		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	};
 	request.post(options, function (err, res, body) {
-		if (err) {
+		if (err != undefined) {
 			logger.error('请求消息发送失败.原因：' + err);
 		} else {
-			logger.info('请求消息发送接口成功. 相应: ' + JSON.stringify(messageData));
-			if(messageData.errmsg == "ok"){
+			logger.info('请求消息发送接口成功. 响应: ' + JSON.stringify(body));
+			if(body.errmsg == "ok"){
 				//如果发送数据成功 更新消息状态
 				postgresUtil.update('message', { "id": messageArgs.id }, { "status": 1 }, (res) => {
 					logger.info("更新消息成功:", res)
 				});
 			}else{
-				logger.error('消息发送失败.原因：' + messageData.errmsg);
+				logger.error('消息发送失败.原因：' + body.errmsg);
 			}
 		}
 	});
