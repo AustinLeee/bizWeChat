@@ -257,9 +257,7 @@ function createMenu(createMenuToken, openId) {
 					"type": "view",
 					"name": "进度查询",
 					"url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx97bb63ff6573aeaf&redirect_uri=" + encodeURI("http://www.xeeyoung.cn/handleAuth") + "&response_type=code&scope=snsapi_base&state=" + encodeURI("customer/billList/") + "#wechat_redirect"
-				}
-				]
-			},
+				}]},
 			{
 				"name": "管理工单",
 				"type": "view",
@@ -311,24 +309,25 @@ function sendMessage(createToken, messageArgs) {
 		"url": messageArgs.url,
 		"data": JSON.parse(messageArgs.data)
 	};
-	console.log('messageArgs= ' + JSON.stringify(messageData));
+	logger.info('待发送的消息内容 : ' + JSON.stringify(messageData));
 	let options = {
 		url: configDoc.wxApiUrl.messageSend + createToken,
 		form: JSON.stringify(messageData),
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
+		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	};
-
 	request.post(options, function (err, res, body) {
 		if (err) {
-			console.log(err)
+			logger.error('请求消息发送失败.原因：' + err);
 		} else {
-			console.log(body);
-			//如果发送数据成功 更新消息状态
-			postgresUtil.update('message', { "id": messageArgs.id }, { "status": 1 }, (res) => {
-				console.log("更新消息成功:", res)
-			});
+			logger.info('请求消息发送接口成功. 相应: ' + JSON.stringify(messageData));
+			if(messageData.errmsg == "ok"){
+				//如果发送数据成功 更新消息状态
+				postgresUtil.update('message', { "id": messageArgs.id }, { "status": 1 }, (res) => {
+					logger.info("更新消息成功:", res)
+				});
+			}else{
+				logger.error('消息发送失败.原因：' + messageData.errmsg);
+			}
 		}
 	});
 }
